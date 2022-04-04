@@ -26,6 +26,23 @@ On this proposal we are going to define the scope of the new feature we are goin
 # User Stories
 
 1. The user can see a list of posts by just opening the app. The user will see a loading state each time the app loads some data
+```mermaid
+   flowchart LR
+   subgraph 1
+   A[Open App]-->B[Load Posts];
+   B-->C{Did it work?};
+   C--YES-->D(Show Posts);
+   C--NO-->E(Show Error Screen);
+   end
+   subgraph 2
+   H((Posts Loaded))-->I[Refresh]
+   I---->B
+   end
+   1==>2
+   
+```
+   
+   
 2. The user can make a forced refresh of the data (even if the data is the same)
 3. If there is no data to show the app will show an empty screen with a message *“No posts to show”* no matter the type of the error.
 
