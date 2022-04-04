@@ -18,7 +18,7 @@ On this proposal we are going to define the scope of the new feature we are goin
 
 # Success Criteria
 
-- The app can be compiled with the expected use cases defined in [User Stories](https://www.notion.so/Implement-a-post-list-7cb6be6f03464334b4633cedda2d7363)
+- The app can be compiled with the expected use cases defined in [User Stories](#user-stories)
 - All the tests are passed
 - The total coverage of the feature is greater than 60%
 - All the business layer is tested
