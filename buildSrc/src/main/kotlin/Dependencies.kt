@@ -47,7 +47,9 @@ val unitTestingBucket = TestImplementationBucket(
     "io.mockk:mockk" version mockkVersion,
     "org.jetbrains.kotlin:kotlin-reflect" version kotlinVersion,
     "io.mockk:mockk-agent-jvm" version mockkVersion,
-    "org.jetbrains.kotlinx:kotlinx-coroutines-test" version coroutinesVersion
+    "org.jetbrains.kotlinx:kotlinx-coroutines-test" version coroutinesVersion,
+    "io.ktor:ktor-client-mock" version ktorVersion,
+    "io.ktor:ktor-serialization-kotlinx-json" version ktorVersion
 )
 
 val functionalBucket = ImplementationBucket(
