@@ -10,6 +10,7 @@ class DatabasePostsDataSourceTest : BehaviorSpec({
     * - it returns either Result.success or Result.failure
     * - if there is no stored data it returns a DataEmpty Failure
     * - if there is stored data then the data source returns it
-    *   - data source used a list as a storage mechanism */
+    *   - data source used a list as a storage mechanism
+    *   - write/read operations are thread safe*/
 
 })
