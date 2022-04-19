@@ -11,6 +11,6 @@ class DatabasePostsDataSourceTest : BehaviorSpec({
     * - if there is no stored data it returns a DataEmpty Failure
     * - if there is stored data then the data source returns it
     *   - data source used a list as a storage mechanism
-    *   - write/read operations are thread safe*/
+    */
 
 })

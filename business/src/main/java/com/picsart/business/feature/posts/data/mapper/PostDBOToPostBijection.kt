@@ -7,11 +7,11 @@ import com.picsart.business.feature.posts.model.Post
 /**
  * Tests: PostDBOToPostBijection.kt
  */
-internal object PostDBOToPostBijection : Bijection<PostDBO, Post>{
+internal object PostDBOToPostBijection : Bijection<PostDBO, Post> {
 
     override fun invoke(from: PostDBO): Post =
         with(from) { Post(id, userId, title, body) }
 
     override fun revert(from: Post): PostDBO =
-        with(from){ PostDBO(id, userId, title, body) }
+        with(from) { PostDBO(id, userId, title, body) }
 }

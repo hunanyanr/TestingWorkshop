@@ -1,21 +1,27 @@
 package com.m2f.testingworkshop.presentation.utils
 
-import androidx.lifecycle.LiveData
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
 import com.picsart.business.arch.error.Failure
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 context(ComponentActivity)
-fun <T> LiveData<State<T>>.render(actionToPerform: RenderingScope<T>.() -> Unit) {
+fun <T> Flow<State<T>>.render(actionToPerform: RenderingScope<T>.() -> Unit) {
     val renderingScope: RenderingScope<T> = DefaultRenderingScope()
-    observe(this@ComponentActivity) {
-        when(it) {
-            is Error ->  renderingScope.onError(it.failure)
-            is Loaded ->  renderingScope.onLoaded(it.value)
-            Loading ->  renderingScope.onLoading()
-            Idle -> renderingScope.onIdle()
+    actionToPerform(renderingScope).also {
+        lifecycleScope.launch {
+            collect {
+                when (it) {
+                    is Error -> renderingScope.onError(it.failure)
+                    is Loaded -> renderingScope.onLoaded(it.value)
+                    Loading -> renderingScope.onLoading()
+                    Idle -> renderingScope.onIdle()
+                }
+            }
         }
     }
-    actionToPerform(renderingScope)
 }
 
 interface RenderingScope<T> {
@@ -26,7 +32,7 @@ interface RenderingScope<T> {
     var onIdle: () -> Unit
 }
 
-private class DefaultRenderingScope<T>: RenderingScope<T> {
+private class DefaultRenderingScope<T> : RenderingScope<T> {
     override var onEmpty: () -> Unit = {}
     override var onError: (Failure) -> Unit = {}
     override var onLoaded: (T) -> Unit = {}

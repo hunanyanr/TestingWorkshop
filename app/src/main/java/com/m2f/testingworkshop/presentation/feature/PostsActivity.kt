@@ -19,9 +19,9 @@ class PostsActivity : ComponentActivity() {
         setContentView(R.layout.activity_posts)
 
         viewModel.posts().render {
-            onLoading = { Log.d(TAG, "Loading")}
-            onLoaded = { Log.d(TAG, "Loaded ${it.size} items")}
-            onError = { Log.d(TAG, "Error")}
+            onLoading = { Log.d(TAG, "Loading") }
+            onLoaded = { Log.d(TAG, "Loaded ${it.size} items") }
+            onError = { Log.d(TAG, "Error") }
         }
     }
 }
