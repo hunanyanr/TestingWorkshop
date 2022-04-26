@@ -6,7 +6,11 @@ import com.picsart.business.arch.GetListDataSource
 import com.picsart.business.arch.StoreDataSource
 import com.picsart.business.arch.error.ServerError
 import com.picsart.business.feature.posts.model.Post
+import com.picsart.business.generators.post
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.list
+import io.kotest.property.arbitrary.next
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -22,7 +26,7 @@ class DefaultGetPostsRepositoryTest : BehaviorSpec({
             storeDataSource
         )
         xWhen("The Network data source successfully returns posts") {
-            val resultList = emptyList<Post>()
+            val resultList = Arb.list(Arb.post()).next()
             coEvery { networkDataSource.invoke() } returns Either.Right(resultList)
             coEvery { storeDataSource.invoke(any()) } returns Either.Right(resultList)
             xAnd("Repository is invoked") {
