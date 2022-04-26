@@ -20,7 +20,7 @@ class DefaultGetPostsRepositoryTest : BehaviorSpec({
     val networkDataSource: GetListDataSource<Post> = mockk(relaxed = true)
     val storeDataSource: StoreDataSource<Post> = mockk(relaxed = true)
 
-    xGiven("DefaultGetPostsRepositoryTest") {
+    xGiven("DefaultGetPostsRepository") {
         val sut = DefaultGetPostsRepository(
             networkDataSource,
             storeDataSource
