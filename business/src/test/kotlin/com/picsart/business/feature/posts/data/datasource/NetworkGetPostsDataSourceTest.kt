@@ -29,8 +29,15 @@ import kotlinx.serialization.json.Json
 
 class NetworkGetPostsDataSourceTest : BehaviorSpec({
 
-    //This function creates a httpClient with mock responses
+    /**
+     * This function creates a httpClient with mock responses
+     * @param statusCode The response code we whish to send, 200, 404, 500, etc...
+     * @param content the body of the response we want to send
+     *
+     * @return [NetworkGetPostsDataSource] the datasource that will emit the result with the mocked data.
+     */
     fun createDataSourceFor(statusCode: HttpStatusCode, content: String = ""): NetworkGetPostsDataSource {
+        //setup the engine
         val engine = MockEngine { request ->
             respond(
                 status = statusCode,
@@ -38,12 +45,14 @@ class NetworkGetPostsDataSourceTest : BehaviorSpec({
                 headers = headersOf(HttpHeaders.ContentType, "application/json")
             )
         }
+        //creates the http client with the engine
         val client = HttpClient(engine) {
             install(ContentNegotiation) {
                 json()
             }
         }
 
+        //creates the datasource with the mocked client
         return NetworkGetPostsDataSource("localhost", client)
     }
 
