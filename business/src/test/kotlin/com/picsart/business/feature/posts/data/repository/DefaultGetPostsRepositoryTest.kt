@@ -1,6 +1,8 @@
 package com.picsart.business.feature.posts.data.repository
 
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.picsart.business.arch.GetListDataSource
 import com.picsart.business.arch.StoreDataSource
 import com.picsart.business.arch.error.*
@@ -25,7 +27,9 @@ class DefaultGetPostsRepositoryTest : BehaviorSpec({
         )
         xWhen("The Network data source successfully returns posts") {
             val resultList = Arb.list(Arb.post()).next()
-            coEvery { networkDataSource.invoke() } returns Either.Right(resultList)
+            coEvery { networkDataSource.invoke() } returns resultList.right()
+
+            //"answer" is a cool tool that lets you get the arguments taken in the body of the "coEvery"
             coEvery { storeDataSource.invoke(any()) } answers { Either.Right(arg(0)) }
             xAnd("Repository is invoked") {
                 val result = sut.invoke()
@@ -36,8 +40,11 @@ class DefaultGetPostsRepositoryTest : BehaviorSpec({
                     assert(result.isLeft() || result.isRight())
                 }
                 xThen("Repository returns the network result") {
-                    coVerify(exactly = 1) { networkDataSource.invoke() }
-                    result shouldBe Either.Right(resultList)
+                    coVerify(exactly = 1) {
+                        networkDataSource.invoke()
+                        storeDataSource.invoke() wasNot Called
+                    }
+                    result shouldBe resultList.right()
                 }
                 xThen("Repository stores the result data into the cache") {
                     coVerify { storeDataSource.invoke(resultList) }
@@ -48,16 +55,16 @@ class DefaultGetPostsRepositoryTest : BehaviorSpec({
 
         xWhen("The Network data source fails for any reason") {
             val resultList = Arb.list(Arb.post()).next()
-            coEvery { networkDataSource.invoke() } returns Either.Left(ServerError)
-            coEvery { storeDataSource.invoke() } returns Either.Right(resultList)
+            coEvery { networkDataSource.invoke() } returns ServerError.left()
+            coEvery { storeDataSource.invoke() } returns resultList.right()
             xAnd("Repository is invoked") {
                 val result = sut.invoke()
-                xThen("It returns either a successful or failing Result ") {
+                xThen("It returns either Right or Left") {
                     assert(result.isLeft() || result.isRight())
                 }
                 xThen("Repository fetches the data from cache") {
                     coVerify(exactly = 1) { storeDataSource() }
-                    result shouldBe Either.Right(resultList)
+                    result shouldBe resultList.right()
                 }
             }
         }
