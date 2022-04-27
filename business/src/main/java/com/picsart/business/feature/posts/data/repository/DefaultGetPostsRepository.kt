@@ -1,6 +1,8 @@
 package com.picsart.business.feature.posts.data.repository
 
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.handleErrorWith
 import com.picsart.business.arch.GetListDataSource
 import com.picsart.business.arch.GetListRepository
 import com.picsart.business.arch.StoreDataSource
@@ -15,5 +17,7 @@ internal class DefaultGetPostsRepository(
     private val databaseDataSource: StoreDataSource<Post>
 ) : GetListRepository<Post> {
 
-    override suspend fun invoke(): Either<Failure, List<Post>> = TODO()
+    override suspend fun invoke(): Either<Failure, List<Post>> = networkDataSource()
+            .flatMap { databaseDataSource(it) }
+            .handleErrorWith { databaseDataSource() }
 }
