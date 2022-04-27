@@ -10,7 +10,8 @@ import com.picsart.business.feature.posts.model.Post
  * Tests: DefaultGetPostsUsecaseTest.kt
  */
 internal class DefaultGetPostsUsecase(
-    private val getuserRepository: GetListRepository<Post>
+    private val getPostsRepository: GetListRepository<Post>
 ) : GetListUseCase<Post> {
-    override suspend fun invoke(): Either<Failure, List<Post>> = TODO()
+    override suspend fun invoke(): Either<Failure, List<Post>> = getPostsRepository()
+        .map { it.filter { it.title.isNotBlank() } }
 }
